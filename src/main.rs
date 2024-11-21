@@ -10,6 +10,10 @@ const GRID_WIDTH: usize = 50;
 const GRID_HEIGHT: usize = 50;
 const SCALE_FACTOR: usize = 10; // Escala para hacer las células más grandes en la ventana
 
+// Colores del programa
+const BACKGROUND_COLOR: u32 = 0x001F3F; // Azul oscuro
+const ORGANISM_COLOR: u32 = 0x00FF7F;   // Verde claro
+
 // Función para inicializar un "Glider"
 fn glider(grid: &mut Vec<Vec<bool>>, start_x: usize, start_y: usize) {
     grid[start_y][start_x + 1] = true;
@@ -107,21 +111,52 @@ fn pulsar(grid: &mut Vec<Vec<bool>>, start_x: usize, start_y: usize) {
     }
 }
 
+
+// Función para inicializar un "Middle-weight spaceship" (MWSS)
+fn mwss(grid: &mut Vec<Vec<bool>>, start_x: usize, start_y: usize) {
+    grid[start_y][start_x + 1] = true;
+    grid[start_y][start_x + 2] = true;
+    grid[start_y][start_x + 3] = true;
+    grid[start_y + 1][start_x] = true;
+    grid[start_y + 1][start_x + 4] = true;
+    grid[start_y + 2][start_x + 4] = true;
+    grid[start_y + 3][start_x] = true;
+    grid[start_y + 3][start_x + 3] = true;
+    grid[start_y + 3][start_x + 4] = true;
+}
+
+// Función para inicializar un "Heavy-weight spaceship" (HWSS)
+fn hwss(grid: &mut Vec<Vec<bool>>, start_x: usize, start_y: usize) {
+    grid[start_y][start_x + 1] = true;
+    grid[start_y][start_x + 2] = true;
+    grid[start_y][start_x + 3] = true;
+    grid[start_y][start_x + 4] = true;
+    grid[start_y + 1][start_x] = true;
+    grid[start_y + 1][start_x + 5] = true;
+    grid[start_y + 2][start_x + 5] = true;
+    grid[start_y + 3][start_x] = true;
+    grid[start_y + 3][start_x + 4] = true;
+    grid[start_y + 3][start_x + 5] = true;
+}
+
 // Inicializa el patrón con múltiples organismos
 fn initialize_pattern(grid: &mut Vec<Vec<bool>>) {
     glider(grid, 2, 2);
     glider(grid, 10, 10);
     lwss(grid, 15, 5);
     lwss(grid, 30, 20);
+    mwss(grid, 20, 10);
+    hwss(grid, 25, 25);
     block(grid, 5, 25);
-    block(grid, 40, 40);
     bee_hive(grid, 25, 10);
-    bee_hive(grid, 35, 15);
+    bee_hive(grid, 35, 18);
     loaf(grid, 20, 30);
+    loaf(grid, 2, 39);
     tub(grid, 15, 35);
     pulsar(grid, 10, 40);
     beacon(grid, 5, 5);
     toad(grid, 35, 25);
+    toad(grid, 40, 15);
 }
 
 // Cuenta los vecinos vivos de una célula
@@ -163,7 +198,7 @@ fn game_of_life_step(current: &Vec<Vec<bool>>, next: &mut Vec<Vec<bool>>) {
 fn render_grid(framebuffer: &mut Framebuffer, grid: &Vec<Vec<bool>>) {
     for y in 0..GRID_HEIGHT {
         for x in 0..GRID_WIDTH {
-            let color = if grid[y][x] { 0xFFFFFF } else { 0x000000 };
+            let color = if grid[y][x] { ORGANISM_COLOR } else { BACKGROUND_COLOR };
             for sy in 0..SCALE_FACTOR {
                 for sx in 0..SCALE_FACTOR {
                     framebuffer.point(
