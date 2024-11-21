@@ -1,6 +1,17 @@
 use minifb::{Key, Window, WindowOptions};
 use std::time::Duration;
 mod framebuffer;
+use framebuffer::Framebuffer;
+
+fn render(framebuffer: &mut Framebuffer) {
+    // Clear the framebuffer
+    framebuffer.set_background_color(0x333355);
+    framebuffer.clear();
+
+    // Draw some points
+    framebuffer.set_current_color(0xFFDDDD);
+    framebuffer.point(20, 40);
+}
 
 fn main() {
   let window_width = 800;
@@ -20,8 +31,6 @@ fn main() {
     WindowOptions::default(),
   ).unwrap();
 
-  let mut x = 1 as i32;
-  let mut speed = 1 as i32;
 
   while window.is_open() {
     // listen to inputs
@@ -29,22 +38,12 @@ fn main() {
       break;
     }
 
-    // prepare variables for rendering
-    if x as usize == framebuffer_width {
-      speed = -1;
-    }
-    if x == 0 {
-      speed = 1;
-    }
-    x += speed;
-
     // Clear the framebuffer
     framebuffer.set_background_color(0x333355);
     framebuffer.clear();
 
-    // Draw some points
-    framebuffer.set_current_color(0xFFDDDD);
-    framebuffer.point(x as usize, 40);
+    // render
+    render(&mut framebuffer);
 
     // Update the window with the framebuffer contents
     window
