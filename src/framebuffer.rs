@@ -27,9 +27,7 @@ impl Framebuffer {
 
     pub fn point(&mut self, x: usize, y: usize) {
         if x < self.width && y < self.height {
-            // Invertir la coordenada Y
-            let inverted_y = self.height - y - 1;
-            self.buffer[inverted_y * self.width + x] = self.current_color;
+            self.buffer[y * self.width + x] = self.current_color;
         }
     }
 
@@ -40,13 +38,4 @@ impl Framebuffer {
     pub fn set_current_color(&mut self, color: u32) {
         self.current_color = color;
     }
-
-    pub fn get_pixel(&self, x: usize, y: usize) -> Option<u32> {
-        if x < self.width && y < self.height {
-            Some(self.buffer[y * self.width + x])
-        } else {
-            None
-        }
-    }
-   
 }
