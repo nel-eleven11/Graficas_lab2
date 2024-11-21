@@ -1,7 +1,8 @@
 [package]
-name = "Graficas_lab1"
+name = "Graficas_lab2"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-nalgebra-glm = "0.3"
+nalgebra-glm = "0.18.0"
+minifb = "0.26.0"
